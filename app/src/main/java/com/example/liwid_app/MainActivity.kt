@@ -48,33 +48,18 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 
 class MainActivity : ComponentActivity() {
-    companion object {
-        const val STOP_BROADCAST_ACTION = "STOP_FOREGROUND_SERVICE"
-    }
 
     private val apiService=ApiClient.apiService
-    private val notificationReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == ForegroundService.START_BROADCAST_ACTION) {
-                Log.d("BroadCast", "Foreground Called Notification Routine")
-                startNotificationTimer(60,false,true)
-            }
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0
+        )
         createNotificationChannel()
         setContent {
             App()
         }
-        val filter=IntentFilter().apply {
-            addAction("START_NOTIFICATION_TIMER")
-        }
-        registerReceiver(notificationReceiver,filter)
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(notificationReceiver)
     }
 
     @Composable
@@ -122,7 +107,12 @@ class MainActivity : ComponentActivity() {
                     onCheckedChange = {
                         isForegroundEnabled=it
                         if(it){
-                            fetchAndShowNotification(1)
+                            if (checkNotificationPermission()) {
+                                Log.d("LiwidSBackground", "Started")
+                                fetchAndShowNotification(1)
+                            } else {
+                                requestNotificationPermission()
+                            }
                         }else{
                             stopNotificationTimer()
                             terminateFgService()
@@ -142,13 +132,11 @@ class MainActivity : ComponentActivity() {
             putExtra(ForegroundService.NOTIFICATION_KEY, notification)
         }
         ContextCompat.startForegroundService(this, serviceIntent)
-        Log.d("SForegnd", "Started")
+        Log.d("LiwidSForegnd", "Started")
     }
 
     private fun terminateFgService() {
-        val stopServiceIntent = Intent(STOP_BROADCAST_ACTION)
-        sendBroadcast(stopServiceIntent)
-        Log.d("TForegnd", "Terminated")
+        Log.d("LiwidTForegnd", "Terminated")
     }
 
     val CHANNEL_ID="LIVE_CHANNEL_ID"
@@ -158,14 +146,14 @@ class MainActivity : ComponentActivity() {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
                 if (response.isSuccessful) {
                     val matchData = response.body()?.result?.firstOrNull()
-                    Log.d("MatchData", "matchdata")
+                    Log.d("LiwidMatchData", "matchdata")
                     println(matchData)
                     if(flag==1){
-                        Log.d("FgService", "service is created")
+                        Log.d("LiwidFgService", "service is created")
                         matchData?.let { enableFgservice(it) }
                     }
                     else{
-                        Log.d("BgService", "notification produced for bg")
+                        Log.d("LiwidBgService", "notification produced for bg")
                         matchData?.let { showNotification(it) }
                     }
                 }
@@ -204,16 +192,16 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun requestNotificationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0
-        )
         if(ActivityCompat.checkSelfPermission(
                 applicationContext,
                 android.Manifest.permission.POST_NOTIFICATIONS
             )!=PackageManager.PERMISSION_GRANTED
         ){
-            Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Grant Permission",Toast.LENGTH_SHORT).show()
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0
+            )
         }
     }
 
@@ -232,16 +220,16 @@ class MainActivity : ComponentActivity() {
 
     private var notificationJob: Job?=null
     private fun startNotificationTimer(intervalSeconds:Long,isBgEn:Boolean,isFgEn:Boolean){
-        Log.d("StartNotificationTimer", "In main")
+        Log.d("LiwidStartNotificationTimer", "In main")
         notificationJob= CoroutineScope(Dispatchers.Main).launch {
             while (isActive){
-                Log.d("StartNotification","Started ${isBgEn} and ${isFgEn}")
+                Log.d("LiwidStartNotification","Started ${isBgEn} and ${isFgEn}")
                 if(isBgEn==true && isFgEn==false){
-                    Log.d("Backgrnd", "Called fetch and show in bg")
+                    Log.d("LiwidBackgrnd", "Called fetch and show in bg")
                     fetchAndShowNotification(0)
                 }
                 else if (isBgEn==false && isFgEn==true){
-                    Log.d("Foregrnd", "Called fetch and show in fg")
+                    Log.d("LiwidForegrnd", "Called fetch and show in fg")
                     fetchAndShowNotification(1)
                 }
 
@@ -255,13 +243,12 @@ class MainActivity : ComponentActivity() {
         val notificationManager =
             applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(1)
-        Log.d("Terminated","StopNotificationTimer")
+        Log.d("LiwidTerminated","StopNotificationTimer")
     }
 }
 class ForegroundService:Service(){
     companion object {
         val NOTIFICATION_KEY: String?="notification"
-        val START_BROADCAST_ACTION: String?="FOREGROUND_SERVICE_ACTION"
     }
     private val CHANNEL_ID = "ForegroundServiceChannel"
     override fun onBind(p0: Intent?): IBinder? {
@@ -271,27 +258,9 @@ class ForegroundService:Service(){
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification=intent?.getParcelableExtra<Notification>("notification")
         if(notification!=null){
+            Log.d("onStart","Foreground Broadcast started")
             startForeground(1,notification)
-            val startServiceIntent = Intent(START_BROADCAST_ACTION)
-            sendBroadcast(startServiceIntent)
         }
         return super.onStartCommand(intent, flags, startId)
-    }
-    private val stopServiceReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == MainActivity.STOP_BROADCAST_ACTION) {
-                stopForegroundService()
-            }
-        }
-    }
-    private fun stopForegroundService() {
-        stopForeground(1)
-        stopSelf()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("BroadCast","Stop foreground broadcast")
-        unregisterReceiver(stopServiceReceiver)
     }
 }
