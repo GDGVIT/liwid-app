@@ -13,8 +13,8 @@ data class MatchData(
     @SerializedName("league_name")
     val leagueName: String?,
 
-//    @SerializedName("event_type")
-//    val matchType: String?,
+    @SerializedName("event_key")
+    val matchType: Int?,
 
     @SerializedName("event_home_team")
     val homeTeamName: String?,
@@ -28,9 +28,9 @@ data class MatchData(
     @SerializedName("away_team_logo")
     val awayTeamLogo: String?,
 
-    @SerializedName("event_final_result")
-    val result: String?,
+    @SerializedName("event_home_final_result")
+    val homeTeamResult: String?,
 
-//    @SerializedName("event_away_final_result")
-//    val awayTeamResult: String?
+    @SerializedName("event_away_final_result")
+    val awayTeamResult: String?
 )

@@ -13,6 +13,6 @@ interface ApiService {
     fun getMatch(
         @Query("met") eventType:String= MATCH_TYPE,
         @Query("APIkey")apikey:String= API_KEY,
-        @Query("matchID")leagueId:Int= league_id
+        @Query("leagueID")leagueId:Int= league_id
     ): Call<MatchResponse>
 }
