@@ -1,4 +1,4 @@
-package com.example.liwid_app.util
+package com.example.liwid_app.example.util
 
 import com.example.liwid_app.BuildConfig
 

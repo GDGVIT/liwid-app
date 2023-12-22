@@ -1,4 +1,4 @@
-package com.example.liwid_app
+package com.example.liwid_app.example
 
 import android.Manifest
 import android.app.Notification
@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,8 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.liwid_app.data.model.MatchData
-import com.example.liwid_app.data.model.MatchResponse
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,15 +40,18 @@ import retrofit2.Response
 import android.app.Service
 import android.content.IntentFilter
 import android.os.IBinder
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import com.example.liwid_app.example.api.ApiClient
+import com.example.liwid_app.example.model.MatchData
+import com.example.liwid_app.example.model.MatchResponse
+import com.example.liwid_app.R
 
 class MainActivity : ComponentActivity() {
     companion object {
         const val STOP_BROADCAST_ACTION = "STOP_FOREGROUND_SERVICE"
     }
 
-    private val apiService=ApiClient.apiService
+    private val apiService= ApiClient.apiService
     private val notificationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == ForegroundService.START_BROADCAST_ACTION) {
@@ -176,6 +175,7 @@ class MainActivity : ComponentActivity() {
             }
         })
     }
+
 
     private fun showNotification(matchData: MatchData): NotificationCompat.Builder {
         Log.d("ShowNotification", "Check for notification")

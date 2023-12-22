@@ -1,9 +1,10 @@
-package com.example.liwid_app.data.model
+package com.example.liwid_app.example.api
 
-import com.example.liwid_app.util.API_KEY
-import com.example.liwid_app.util.GAME_TYPE
-import com.example.liwid_app.util.MATCH_TYPE
-import com.example.liwid_app.util.league_id
+import com.example.liwid_app.example.model.MatchResponse
+import com.example.liwid_app.example.util.API_KEY
+import com.example.liwid_app.example.util.GAME_TYPE
+import com.example.liwid_app.example.util.MATCH_TYPE
+import com.example.liwid_app.example.util.league_id
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

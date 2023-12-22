@@ -1,7 +1,6 @@
-package com.example.liwid_app
+package com.example.liwid_app.example.api
 
-import com.example.liwid_app.data.model.ApiService
-import com.example.liwid_app.util.BASE_URL
+import com.example.liwid_app.example.util.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -11,7 +10,7 @@ object ApiClient {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val apiService:ApiService by lazy {
+    val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
 }
