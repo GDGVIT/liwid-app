@@ -1,9 +1,13 @@
 package com.example.liwid_app.extension
+import android.Manifest
 import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.IBinder
+import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -38,7 +42,7 @@ class WidgetForegroundService:Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification=intent?.getParcelableExtra<Notification>(NOTIFICATION_KEY)
         val widgetType=intent?.getSerializableExtra(WIDGET_TYPE_KEY) as LiveWidget.WidgetType
-        if(notification!=null && widgetType!=null) {
+        if(notification!=null) {
             startForeground(NOTIFICATION_ID, notification)
             notificationJob = GlobalScope.launch(Dispatchers.IO) {
                 while(isActive){
@@ -49,32 +53,53 @@ class WidgetForegroundService:Service() {
         }
         return START_STICKY
     }
-    private suspend fun fetchDataAndUpdateWidget(widgetType: LiveWidget.WidgetType) {
-        // Implement data fetching logic here based on widgetType
-        // Update the notification content accordingly
-        val updatedNotification = when (widgetType) {
-            LiveWidget.WidgetType.SPORTS -> createSportsNotification()
-            LiveWidget.WidgetType.TRACKING -> createTrackingNotification()
-        }
+    private fun fetchDataAndUpdateWidget(widgetType: LiveWidget.WidgetType) {
+        try {
+            val responseData = when (widgetType) {
+                LiveWidget.WidgetType.SPORTS -> LiveSportsWidget.fetchSportsData()
+                LiveWidget.WidgetType.TRACKING -> LiveTrackingWidget.fetchTrackingData()
+            }
 
-        with(NotificationManagerCompat.from(this)) {
-            notify(NOTIFICATION_ID, updatedNotification)
+            // Update the notification content based on the API response data
+            val notificationContent = when (widgetType) {
+                LiveWidget.WidgetType.SPORTS -> "Sports Data: $responseData"
+                LiveWidget.WidgetType.TRACKING -> "Tracking Data: $responseData"
+            }
+
+            // Create the updated notification
+            val updatedNotification = when (widgetType) {
+                LiveWidget.WidgetType.SPORTS -> createSportsWidget(notificationContent)
+                LiveWidget.WidgetType.TRACKING -> createTrackingWidget(notificationContent)
+            }
+
+            // Notify the notification manager
+            with(NotificationManagerCompat.from(this)) {
+                if (ActivityCompat.checkSelfPermission(
+                        applicationContext,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    notify(NOTIFICATION_ID, updatedNotification)
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("WidgetForegroundService", "Error fetching data: ${e.message}")
         }
     }
 
-    private fun createSportsNotification(): Notification {
+    private fun createSportsWidget(notificationContent: String): Notification {
         // Implement notification creation logic for SPORTS widget
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Sports Notification")
-            .setContentText("Fetching sports data in the background")
+            .setContentText(notificationContent)
             .build()
     }
 
-    private fun createTrackingNotification(): Notification {
+    private fun createTrackingWidget(notificationContent: String): Notification {
         // Implement notification creation logic for TRACKING widget
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Tracking Notification")
-            .setContentText("Fetching tracking data in the background")
+            .setContentText(notificationContent)
             .build()
     }
 

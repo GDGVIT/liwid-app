@@ -9,24 +9,27 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.liwid_app.extension.WidgetForegroundService.Companion.startService
+import retrofit2.Call
 
 abstract class LiveWidget(
     protected val context: Context,
     protected val activity: Activity,
+    protected var widgetType: WidgetType,
+    var PERMISSON_REQUEST_CODE: Int=0,
+    var CHANNEL_DESCRIPTION: String="Channel for Live Widget",
+    var CHANNEL_NAME: String="Live Widget Channel",
+    var CHANNEL_ID: String="Live_Widget_Channel_Id",
 ) {
     enum class WidgetType{
         SPORTS,
-        TRACKING
+        TRACKING,
     }
-    var widgetType: WidgetType?=null
-    var PERMISSON_REQUEST_CODE: Int=0
-    var CHANNEL_DESCRIPTION: String="Channel for Live Widget"
-    var CHANNEL_NAME: String="Live Widget Channel"
-    var CHANNEL_ID: String="Live_Widget_Channel_Id"
 
     init {
         createLiveWidgetChannel()
         requestLiveWidgetPermission()
+        startService(context, widgetType)
     }
 
     fun createLiveWidgetChannel() {
@@ -58,8 +61,5 @@ abstract class LiveWidget(
             }
         }
     }
-
-    abstract fun startLiveWidget()
-    abstract fun stopLiveWidget()
-
+    fun <T> Call<T>.enqueue(t: T) {}
 }
