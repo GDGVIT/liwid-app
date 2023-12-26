@@ -13,48 +13,54 @@ import retrofit2.Response
 class LiveTrackingWidget(
     context: Context,
     activity: Activity,
-    widgetType: WidgetType,
     private val baseUrl: String,
     private val endpoint: String,
-    private val params: Map<String, String>,
+    private val params: Map<String, String>
 ) : LiveWidget(context, activity, WidgetType.TRACKING) {
 
-    fun fetchTrackingData() {
-        val apiClient = ApiClient(baseUrl)
-        val trackingCall = apiClient.createApiService().getData(endpoint, params)
-
-        trackingCall.enqueue(object : Callback<TrackerWidgetData> {
-            override fun onResponse(
-                call: Call<TrackerWidgetData>,
-                response: Response<TrackerWidgetData>
-            ) {
-                if (response.isSuccessful) {
-                    val trackingData = response.body()?.result?.firstOrNull()
-                    trackingData?.let { onSuccess(it) }
-                } else {
-                    onFailure(call, Throwable(response.message()))
-                }
-            }
-
-            override fun onFailure(call: Call<TrackerWidgetData>, t: Throwable) {
-                Log.d("LiveTrackingWidget", "onFailure: ${t.message}")
-            }
-        })
-    }
-
-    private fun onSuccess(it: TrackerData) {
-        // Handle the success here
-    }
-
     companion object {
+        private lateinit var baseUrl: String
+        private lateinit var endpoint: String
+        private lateinit var params: Map<String, String>
         fun create(
             context: Context,
             activity: Activity,
             baseUrl: String,
             endpoint: String,
-            params: Map<String, String>,
+            params: Map<String, String>
         ): LiveTrackingWidget {
-            return LiveTrackingWidget(context, activity, WidgetType.TRACKING, baseUrl, endpoint, params)
+            return LiveTrackingWidget(context, activity, baseUrl, endpoint, params)
+        }
+
+        fun fetchTrackingData() {
+            val apiClient = ApiClient(baseUrl)
+            val trackingCall = apiClient.createApiService().getData(endpoint, params)
+
+            trackingCall.enqueue(object : Callback<TrackerWidgetData> {
+                override fun onResponse(
+                    call: Call<TrackerWidgetData>,
+                    response: Response<TrackerWidgetData>
+                ) {
+                    if (response.isSuccessful) {
+                        val trackingData = response.body()?.result?.firstOrNull()
+                        trackingData?.let { onSuccess(it) }
+                    } else {
+                        onFailure(call, Throwable(response.message()))
+                    }
+                }
+
+                override fun onFailure(call: Call<TrackerWidgetData>, t: Throwable) {
+                    Log.d("LiveTrackingWidget", "onFailure: ${t.message}")
+                }
+            })
+        }
+
+        private fun onSuccess(it: TrackerData) {
+            // Handle the success here
         }
     }
+}
+
+fun <T> Call<T>.enqueue(t: T) {
+
 }
