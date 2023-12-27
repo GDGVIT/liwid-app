@@ -1,10 +1,11 @@
-package com.example.liwid_app.extension
+package com.example.liwid_app.extension.widget
 import android.content.Context
 import android.app.Activity
 import android.util.Log
+import com.example.liwid_app.extension.LiveWidget
 import com.example.liwid_app.extension.api.ApiClient
-import com.example.liwid_app.extension.model.SportsData
-import com.example.liwid_app.extension.model.SportsDataResponse
+import com.example.liwid_app.extension.api.model.SportsData
+import com.example.liwid_app.extension.api.model.SportsDataResponse
 import retrofit2.Call
 
 
@@ -14,7 +15,7 @@ class LiveSportsWidget(
     private val baseUrl: String,
     private val endpoint: String,
     private val params: Map<String, String>,
-):LiveWidget(context, activity, WidgetType.SPORTS) {
+): LiveWidget(context, activity, WidgetType.SPORTS) {
     companion object {
         private lateinit var baseUrl: String
         private lateinit var endpoint: String
@@ -27,9 +28,9 @@ class LiveSportsWidget(
             endpoint: String,
             params: Map<String, String>,
         ): LiveSportsWidget {
-            this.baseUrl = baseUrl
-            this.endpoint = endpoint
-            this.params = params
+            Companion.baseUrl = baseUrl
+            Companion.endpoint = endpoint
+            Companion.params = params
             return LiveSportsWidget(context, activity, baseUrl, endpoint, params)
         }
 
@@ -44,7 +45,7 @@ class LiveSportsWidget(
                 ) {
                     if (response.isSuccessful) {
                         val sportsData = response.body()?.result?.firstOrNull()
-                        sportsData?.let {onSuccess(it) }
+                        sportsData?.let { onSuccess(it) }
                     } else {
                         onFailure(call, Throwable(response.message()))
                     }
@@ -55,8 +56,20 @@ class LiveSportsWidget(
                 }
             })
         }
-        private fun onSuccess(it: SportsData) {
+        private fun onSuccess(it: SportsData): SportsData {
             Log.d("LiveSportsWidget", "onSuccess: $it")
+            return SportsData(
+                it.eventStatus,
+                it.leagueName,
+                it.eventId,
+                it.homeTeamName,
+                it.awayTeamName,
+                it.homeTeamLogo,
+                it.awayTeamLogo,
+                it.homeTeamResult,
+                it.awayTeamResult,
+                it.matchResult
+            )
         }
     }
 }

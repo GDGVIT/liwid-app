@@ -11,6 +11,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.example.liwid_app.extension.api.model.SportsData
+import com.example.liwid_app.extension.api.model.TrackerData
+import com.example.liwid_app.extension.widget.LiveSportsWidget
+import com.example.liwid_app.extension.widget.LiveTrackingWidget
 import kotlinx.coroutines.*
 
 class WidgetForegroundService:Service() {
@@ -53,23 +57,26 @@ class WidgetForegroundService:Service() {
         }
         return START_STICKY
     }
+    var resSportsData: SportsData? = null
+    var resTrackingData: TrackerData? = null
     private fun fetchDataAndUpdateWidget(widgetType: LiveWidget.WidgetType) {
         try {
-            val responseData = when (widgetType) {
-                LiveWidget.WidgetType.SPORTS -> LiveSportsWidget.fetchSportsData()
-                LiveWidget.WidgetType.TRACKING -> LiveTrackingWidget.fetchTrackingData()
+           if (widgetType == LiveWidget.WidgetType.SPORTS) {
+                var resSportsData: Unit = LiveSportsWidget.fetchSportsData()
+            } else {
+               var resTrackingData: Unit = LiveTrackingWidget.fetchTrackingData()
             }
 
             // Update the notification content based on the API response data
             val notificationContent = when (widgetType) {
-                LiveWidget.WidgetType.SPORTS -> "Sports Data: $responseData"
-                LiveWidget.WidgetType.TRACKING -> "Tracking Data: $responseData"
+                LiveWidget.WidgetType.SPORTS -> resSportsData
+                LiveWidget.WidgetType.TRACKING -> resTrackingData
             }
 
             // Create the updated notification
             val updatedNotification = when (widgetType) {
-                LiveWidget.WidgetType.SPORTS -> createSportsWidget(notificationContent)
-                LiveWidget.WidgetType.TRACKING -> createTrackingWidget(notificationContent)
+                LiveWidget.WidgetType.SPORTS -> createSportsWidget(notificationContent as SportsData)
+                LiveWidget.WidgetType.TRACKING -> createTrackingWidget(notificationContent as TrackerData)
             }
 
             // Notify the notification manager
@@ -87,19 +94,16 @@ class WidgetForegroundService:Service() {
         }
     }
 
-    private fun createSportsWidget(notificationContent: String): Notification {
+    private fun createSportsWidget(notificationContent: SportsData): Notification {
         // Implement notification creation logic for SPORTS widget
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Sports Notification")
-            .setContentText(notificationContent)
+
             .build()
     }
 
-    private fun createTrackingWidget(notificationContent: String): Notification {
+    private fun createTrackingWidget(notificationContent: TrackerData): Notification {
         // Implement notification creation logic for TRACKING widget
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Tracking Notification")
-            .setContentText(notificationContent)
             .build()
     }
 
