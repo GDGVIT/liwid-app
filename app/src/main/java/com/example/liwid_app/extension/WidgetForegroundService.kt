@@ -1,16 +1,20 @@
 package com.example.liwid_app.extension
 import android.Manifest
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.IBinder
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.example.liwid_app.R
 import com.example.liwid_app.extension.api.model.SportsData
 import com.example.liwid_app.extension.api.model.TrackerData
 import com.example.liwid_app.extension.widget.LiveSportsWidget
@@ -37,6 +41,9 @@ class WidgetForegroundService:Service() {
     private val CHANNEL_ID = "ForegroundServiceChannel"
     private var notificationJob: Job? = null
     private val NOTIFICATION_ID:Int=1
+    val sportsNotificationManager=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val trackingNotificationManager=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
 
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -94,15 +101,33 @@ class WidgetForegroundService:Service() {
         }
     }
 
+    val sportsNotificationLayout= RemoteViews("com.example.liwid_app",R.layout.sports_widget_layout_wrapped)
+//    val sportsNotificationLayoutExp= RemoteViews("com.example.liwid_app",R.layout.sports_widget_layout_expanded)
+
+
     private fun createSportsWidget(notificationContent: SportsData): Notification {
+        sportsNotificationLayout.setTextViewText(R.id.league_name,notificationContent.leagueName)
+        sportsNotificationLayout.setTextViewText(R.id.homeTeamName,notificationContent.homeTeamName)
+        sportsNotificationLayout.setTextViewText(R.id.awayTeamName,notificationContent.awayTeamName)
+        sportsNotificationLayout.setTextViewText(R.id.homeTeamScore,notificationContent.homeTeamResult.toString())
+        sportsNotificationLayout.setTextViewText(R.id.awayTeamScore,notificationContent.awayTeamResult.toString())
+        sportsNotificationLayout.setTextViewText(R.id.centralMatchResult,notificationContent.matchResult)
+        sportsNotificationLayout.setTextViewText(R.id.eventStatus,notificationContent.eventStatus)
+        sportsNotificationLayout.setTextViewText(R.id.smallAwayLogo,notificationContent.awayTeamLogo)
+        sportsNotificationLayout.setTextViewText(R.id.smallHomeLogo,notificationContent.homeTeamLogo)
+        val homeTeamLogoBitmap=Glide.with(applicationContext).asBitmap().load(notificationContent.homeTeamLogo).submit().get()
+        val awayTeamLogoBitmap=Glide.with(applicationContext).asBitmap().load(notificationContent.awayTeamLogo).submit().get()
+        sportsNotificationLayout.setImageViewBitmap(R.id.smallHomeLogo,homeTeamLogoBitmap)
+        sportsNotificationLayout.setImageViewBitmap(R.id.smallAwayLogo,awayTeamLogoBitmap)
         // Implement notification creation logic for SPORTS widget
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(notificationContent.leagueName)
-            .setContentText("${notificationContent.homeTeamName} vs ${notificationContent.awayTeamName}")
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText("${notificationContent.homeTeamName} vs ${notificationContent.awayTeamName}")
-            )
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(sportsNotificationLayout)
+//            .setCustomBigContentView(notificationLayoutExpanded)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setOngoing(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOnlyAlertOnce(true)
             .build()
     }
 

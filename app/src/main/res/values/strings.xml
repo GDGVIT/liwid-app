@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="league_name" />
     <string name="vs">VS</string>
+    <string name="home_team_logo_desc">Home Team Logo</string>
+    <string name="away_team_logo_desc">Away Team Logo</string>
 </resources>

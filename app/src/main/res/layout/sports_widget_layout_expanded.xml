@@ -5,7 +5,7 @@
 
     <!-- Top Title (League Name) -->
     <TextView
-        android:id="@+id/topTitle"
+        android:id="@+id/league_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
@@ -19,17 +19,18 @@
         android:id="@+id/smallHomeLogo"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/home_team_logo_desc" />
 
     <!-- Home Team Name -->
     <TextView
         android:id="@+id/homeTeamName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_toEndOf="@id/smallHomeLogo"
         android:layout_centerVertical="true"
         android:text=""
@@ -42,7 +43,7 @@
         android:id="@+id/homeTeamResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_toEndOf="@id/homeTeamName"
         android:layout_marginStart="8dp"
         android:layout_centerVertical="true"
@@ -55,7 +56,7 @@
         android:id="@+id/centralMatchResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_toEndOf="@id/homeTeamResult"
         android:layout_toStartOf="@id/smallAwayLogo"
         android:gravity="center"
@@ -69,17 +70,18 @@
         android:id="@+id/smallAwayLogo"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"/>
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/away_team_logo_desc" />
 
     <!-- Away Team Name -->
     <TextView
         android:id="@+id/awayTeamName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_toStartOf="@id/smallAwayLogo"
         android:layout_centerVertical="true"
         android:text=""
@@ -92,7 +94,7 @@
         android:id="@+id/awayTeamResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/topTitle"
+        android:layout_below="@id/league_name"
         android:layout_toStartOf="@id/awayTeamName"
         android:layout_marginEnd="8dp"
         android:layout_centerVertical="true"
