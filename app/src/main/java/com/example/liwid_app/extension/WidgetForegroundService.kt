@@ -97,7 +97,12 @@ class WidgetForegroundService:Service() {
     private fun createSportsWidget(notificationContent: SportsData): Notification {
         // Implement notification creation logic for SPORTS widget
         return NotificationCompat.Builder(this, CHANNEL_ID)
-
+            .setContentTitle(notificationContent.leagueName)
+            .setContentText("${notificationContent.homeTeamName} vs ${notificationContent.awayTeamName}")
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("${notificationContent.homeTeamName} vs ${notificationContent.awayTeamName}")
+            )
             .build()
     }
 
