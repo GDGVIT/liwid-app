@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.liwid_app'
+    namespace 'com.liwid.liwid_extension'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.liwid_app"
+        applicationId "com.liwid.liwid_extension"
         minSdk 24
         targetSdk 34
         versionCode 1

@@ -1,4 +1,4 @@
-package com.example.liwid_app.extension
+package com.liwid.liwid_extension.extension
 import android.Manifest
 import android.app.Notification
 import android.app.Service
@@ -13,11 +13,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.example.liwid_app.R
-import com.example.liwid_app.extension.api.model.SportsData
-import com.example.liwid_app.extension.api.model.TrackerData
-import com.example.liwid_app.extension.widget.LiveSportsWidget
-import com.example.liwid_app.extension.widget.LiveTrackingWidget
+import com.liwid.liwid_extension.R
+import com.liwid.liwid_extension.extension.api.model.SportsData
+import com.liwid.liwid_extension.extension.api.model.TrackerData
+import com.liwid.liwid_extension.extension.widget.LiveSportsWidget
+import com.liwid.liwid_extension.extension.widget.LiveTrackingWidget
 import kotlinx.coroutines.*
 
 class WidgetForegroundService:Service() {

@@ -1,4 +1,4 @@
-package com.example.liwid_app.extension.api.model
+package com.liwid.liwid_extension.extension.api.model
 import java.util.Date
 
 data class TrackerWidgetData(

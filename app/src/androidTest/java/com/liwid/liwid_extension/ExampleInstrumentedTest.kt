@@ -1,4 +1,4 @@
-package com.example.liwid_app
+package com.liwid.liwid_extension
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

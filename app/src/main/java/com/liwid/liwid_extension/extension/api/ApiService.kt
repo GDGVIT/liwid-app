@@ -1,5 +1,5 @@
-package com.example.liwid_app.extension.api
-import com.example.liwid_app.example.util.BASE_URL
+package com.liwid.liwid_extension.extension.api
+import com.liwid.liwid_extension.example.util.BASE_URL
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.QueryMap

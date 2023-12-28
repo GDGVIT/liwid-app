@@ -1,4 +1,4 @@
-package com.example.liwid_app.extension
+package com.liwid.liwid_extension.extension
 
 import android.Manifest
 import android.app.Activity
@@ -9,7 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.liwid_app.extension.WidgetForegroundService.Companion.startService
+import com.liwid.liwid_extension.extension.WidgetForegroundService.Companion.startService
 import retrofit2.Call
 
 abstract class LiveWidget(

@@ -1,8 +1,6 @@
-package com.example.liwid_app.extension.api
-import android.telecom.CallEndpoint
+package com.liwid.liwid_extension.extension.api
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
 
 class ApiClient (private val baseUrl:String){
     private val retrofit=Retrofit.Builder()

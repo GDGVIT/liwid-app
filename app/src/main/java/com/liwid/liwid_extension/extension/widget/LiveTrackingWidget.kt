@@ -1,12 +1,12 @@
-package com.example.liwid_app.extension.widget
+package com.liwid.liwid_extension.extension.widget
 
 import android.content.Context
 import android.app.Activity
 import android.util.Log
-import com.example.liwid_app.extension.LiveWidget
-import com.example.liwid_app.extension.api.ApiClient
-import com.example.liwid_app.extension.api.model.TrackerData
-import com.example.liwid_app.extension.api.model.TrackerWidgetData
+import com.liwid.liwid_extension.extension.LiveWidget
+import com.liwid.liwid_extension.extension.api.ApiClient
+import com.liwid.liwid_extension.extension.api.model.TrackerData
+import com.liwid.liwid_extension.extension.api.model.TrackerWidgetData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
