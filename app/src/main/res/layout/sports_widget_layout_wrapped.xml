@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+    <!-- Team Logos and Scores -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Home Team Logo -->
+        <ImageView
+            android:id="@+id/smallHomeLogo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle_background"/>
+
+        <!-- Home Team Score -->
+        <TextView
+            android:id="@+id/homeTeamScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_marginEnd="10sp"/>
+
+        <!-- VS Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VS"
+            android:textSize="16sp"
+            android:textColor="#808080"
+            android:layout_marginEnd="5sp"/>
+
+        <!-- Away Team Score -->
+        <TextView
+            android:id="@+id/awayTeamScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_marginStart="8dp"/>
+
+        <!-- Away Team Logo -->
+        <ImageView
+            android:id="@+id/smallAwayLogo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/circle_background"/>
+    </LinearLayout>
+</RelativeLayout>

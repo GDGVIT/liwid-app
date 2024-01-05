@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="league_name" type="id" />
+    <item name="homeTeamName" type="id" />
+    <item name="homeTeamResult" type="id" />
+    <item name="awayTeamName" type="id" />
+    <item name="awayTeamResult" type="id" />
+    <item name="homeTeamLogo" type="id" />
+    <item name="awayTeamLogo" type="id" />
+</resources>
