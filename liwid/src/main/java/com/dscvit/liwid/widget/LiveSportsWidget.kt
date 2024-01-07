@@ -1,11 +1,11 @@
-package com.liwid.liwid_extension.extension.widget
+package com.dscvit.liwid.widget
 import android.content.Context
 import android.app.Activity
 import android.util.Log
-import com.liwid.liwid_extension.extension.LiveWidget
-import com.liwid.liwid_extension.extension.api.ApiClient
-import com.liwid.liwid_extension.extension.api.model.SportsData
-import com.liwid.liwid_extension.extension.api.model.SportsDataResponse
+import com.dscvit.liwid.LiveWidget
+import com.dscvit.liwid.api.ApiClient
+import com.dscvit.liwid.api.model.SportsData
+import com.dscvit.liwid.api.model.SportsDataResponse
 import retrofit2.Call
 
 

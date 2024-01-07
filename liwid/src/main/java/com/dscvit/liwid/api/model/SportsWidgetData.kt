@@ -1,4 +1,4 @@
-package com.liwid.liwid_extension.extension.api.model
+package com.dscvit.liwid.api.model
 import com.google.gson.annotations.SerializedName
 
 data class SportsDataResponse(

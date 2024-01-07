@@ -1,4 +1,4 @@
-package com.liwid.liwid_extension.extension.api
+package com.dscvit.liwid.api
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
