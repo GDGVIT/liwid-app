@@ -1,4 +1,4 @@
-package com.liwid.liwid_extension.extension
+package com.dscvit.liwid
 import android.Manifest
 import android.app.Notification
 import android.app.Service
@@ -13,11 +13,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.liwid.liwid_extension.R
-import com.liwid.liwid_extension.extension.api.model.SportsData
-import com.liwid.liwid_extension.extension.api.model.TrackerData
-import com.liwid.liwid_extension.extension.widget.LiveSportsWidget
-import com.liwid.liwid_extension.extension.widget.LiveTrackingWidget
+import com.dscvit.liwid.api.model.SportsData
+import com.dscvit.liwid.api.model.TrackerData
+import com.dscvit.liwid.widget.LiveSportsWidget
+import com.dscvit.liwid.widget.LiveTrackingWidget
 import kotlinx.coroutines.*
 
 class WidgetForegroundService:Service() {
@@ -53,7 +52,7 @@ class WidgetForegroundService:Service() {
             notificationJob = GlobalScope.launch(Dispatchers.IO) {
                 while(isActive){
                     fetchDataAndUpdateWidget(widgetType)
-                    if(widgetType==LiveWidget.WidgetType.SPORTS){
+                    if(widgetType== LiveWidget.WidgetType.SPORTS){
                         delay(60000)
                     }else{
                         delay(60*5*1000)
